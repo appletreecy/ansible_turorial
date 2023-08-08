@@ -1,3 +1,8 @@
+[web_servers]
 10.140.51.11
+
+[db_servers]
 10.140.50.197
+
+[file_servers]
 10.140.51.30
