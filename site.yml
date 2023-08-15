@@ -3,11 +3,38 @@
   become: true
   pre_tasks:
 
-  - name: install updates (Ubuntu)
+  - name: update repo cache (Ubuntu)
     tags: always
     apt:
-      upgrade: dist
       update_cache: yes
+    changed_when: false
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: add ssh key for simone
+    tags: always
+    authorized_key:
+      user: simone
+      key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDCYwjhEmY8ZFkhvhUWAhoEiYCAjfDa9DsLQk2pC/c4pgL85a5zOPfbMud/A86Cwg5e91BUVli2HZh2Xmzl+9hLqNSbEPeK03PqXEFSETMiENPfIYYxjHOryuj6Ik8OFFguTBhtY/telNQ0vUI+2KBR0n7Ibc7e38uh5oR0qcwuTiQeGa1u5FKk+FXTMZ54AFSpa6QS5T3dlNYSp5+/5vSywu593Qa68m2HKZ1Acz0Pt0apwRqVZA+2pPusZSpqVADikl5F3x02z4yEue4vusvamwq92Hv9GOOAIu3yeaxLmtsPpMiZuWNFPuRToNiqj5P09EtUU1SFKAWjLcMcNPotTxyF2xz2lBiVPOYngt40TptZakL/sfZasfKeEsxyV0lQW0Xs04xP5vbH46WL1U+h0ZJw2Q2vAOPiLgeEyqrwomvh2NyVszNTgA5C2BiZtv7Bb1ILXCyqxJFejBMai+q/pz8tJyh2Ogd0O1Gg0YH5HTUjL+4l6QUGWpjrrXtboHft7ZVB5fSMv/WE7SkkR+3B3o1DRq6YyaRGCsZVf2weiEs07z/52WErhUjkt6M/2igxvVLkPug554dsUSk6Qrt9nNjqC59C7lEG+KeAwzKhRHf/T2oVOnVikaqWpQjpsal42VMxc2jVSwu6/D0l9jUxZgynvNawFW9Ir/dhKstBuw== ansible@ansible-test"
+
+- hosts: workstations
+  become: true
+  tasks:
+
+  - name: install unzip
+    package:
+      name: unzip
+
+  - name: install terraform
+    unarchive:
+      src: https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip
+      dest: /usr/local/bin
+      remote_src: yes
+      mode: 0755
+      owner: root
+      group: root
 
 - hosts: web_servers
   become: true
